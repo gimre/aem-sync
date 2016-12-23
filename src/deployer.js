@@ -8,10 +8,18 @@ exports = module.exports = (
     Watcher
 ) => ( {
     watch( ) {
+
+        utils.log( 'deployer' )( 'watching' )
+        
         Observable.merge(
             new Watcher( './watched' ),
             new Watcher( './tests' )
-        ).subscribe( e => utils.log( e ) )
+        )
+        // .do( utils.log( 'deployer' ) )
+        // .map( createPackage )
+        // .flatMap( installPackage )
+        // .do( async ( res ) => log( await res.text( ) ) )
+        .subscribe( utils.log( 'deployer' ) )
     }
 } )
 

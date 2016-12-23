@@ -6,23 +6,44 @@ const { Observable } = require( '@reactivex/rxjs' )
 exports = module.exports = (
     chokidar,
     config,
-    Observable
+    Observable,
+    utils
 ) => class extends Observable {
+
     constructor( path ) {
         super( )
 
-        const { events, options } = config.watcher 
-        const watcher = chokidar.watch( path, options )
-        const observables = events.map( event =>
-            Observable.fromEvent( watcher, event ) )
+        const {
+            events,
+            options,
+            patience
+        } = config.watcher
 
-        this.source = Observable.merge( ... observables )
+        const {
+            convertToSet,
+            hasLength
+        } = utils
+
+        // initialize fs watcher
+        const watcher     = chokidar.watch( path, options )
+        
+        // map all events to an Observable and merge them
+        const aggregated = events.reduce( ( acc, event ) => {
+            return acc.merge( Observable.fromEvent( watcher, event ) )
+        }, Observable.empty( ) )
+
+        this.source = aggregated
+            .buffer( aggregated.debounce( _ => Observable.timer( patience ) ) )
+            .filter( hasLength )
+            .map( convertToSet )
     }
+    
 }
 
 exports[ '@singleton' ] = true
 exports[ '@require' ] = [
     'chokidar',
     './config',
-    './observable'
+    './observable',
+    './utils'
 ]
