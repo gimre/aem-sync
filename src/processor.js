@@ -3,14 +3,22 @@
 
 exports = module.exports = (
     config,
-    watcher
+    Observable,
+    utils,
+    Watcher
 ) => ( {
     watch( ) {
-        console.log( config.aem.url )
+        Observable.merge(
+            new Watcher( './watched' ),
+            new Watcher( './tests' )
+        ).subscribe( e => utils.log( e ) )
     }
 } )
 
 exports[ '@singleton' ] = true
 exports[ '@require' ] = [
-    './config'
+    './config',
+    './observable',
+    './utils',
+    './watcher'
 ]
