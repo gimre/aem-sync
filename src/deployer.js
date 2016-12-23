@@ -19,7 +19,6 @@ exports = module.exports = (
         .do( utils.log( 'deployer' ) )
         .map( paths  => new Package( paths ) )
         .map( bundle => bundle.writeTo( 'plm' ) )
-        // .do( async ( res ) => log( await res.text( ) ) )
         .subscribe( )
     }
 } )

@@ -1,5 +1,7 @@
 
-exports = module.exports = ( ) => ( {
+exports = module.exports = (
+    path
+) => ( {
     aem: {
         proto:   'http',
         host:    'localhost',
@@ -29,6 +31,8 @@ exports = module.exports = ( ) => ( {
         fileType: '.zip'
     },
 
+    templateRoot: path.join( __dirname, './templates' ),
+
     watcher: {
         events: [
             'add',
@@ -42,3 +46,6 @@ exports = module.exports = ( ) => ( {
 } )
 
 exports[ '@singleton' ] = true
+exports[ '@require' ] = [
+    'path'
+]

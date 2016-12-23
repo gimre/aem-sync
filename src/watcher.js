@@ -20,7 +20,7 @@ exports = module.exports = (
         } = config.watcher
 
         const {
-            convertToSet,
+            getUniques,
             hasLength
         } = utils
 
@@ -35,7 +35,7 @@ exports = module.exports = (
         this.source = aggregated
             .buffer( aggregated.debounce( _ => Observable.timer( patience ) ) )
             .filter( hasLength )
-            .map( convertToSet )
+            .map( getUniques )
     }
     
 }

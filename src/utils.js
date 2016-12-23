@@ -4,9 +4,9 @@
 exports = module.exports = ( debug, config ) => {
     const { prefix } = config.log
     return {
-        convertToSet: ( something ) => {
+        getUniques: ( something ) => {
             try {
-                return new Set( something )
+                return Array.from( new Set( something ) )
             } catch( ex ) {
                 return null
             }

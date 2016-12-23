@@ -6,13 +6,21 @@ exports = module.exports = (
     fs,
     path,
     config,
-    Observable
+    Observable,
+    // templates
 ) => class extends Observable {
     constructor( paths = [ ] ) {
         super( ) 
 
         // create the archive 
         const zip = archiver( 'zip' )
+
+        // extend the instance
+        Object.assign( this, {
+            source: zip,
+            paths,
+            zip
+        } )
 
         // append meta files
         for( let [ name, contents ] of this.getMetaFiles( ) ) {
@@ -25,30 +33,17 @@ exports = module.exports = (
 
         // close the archive
         zip.finalize( )
-
-        // extend the instance
-        Object.assign( this, {
-            source: zip,
-            zip
-        } )
     }
 
     getMetaFiles( ) {
         const now = Date.now( )
         return new Map( )
-            .set( 'META-INF/MANIFEST.MF', [
-                'Manifest-Version: 1.0',
-                'Created-By: aem-sync',
-                'Built-By: gabrielimre',
-                'Build-Jdk: 1.8.0_92',
-                'Specification-Title: plm',
-                `Specification-Version: ${ now }`,
-                'Implementation-Title: pm',
-                `Implementation-Version: ${ now }`,
-                'Implementation-Vendor-Id: aem.sync'
-            ].join( '\n' )
-
-)
+            .set( 'META-INF/vault/filter.xml', [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<workspaceFilter version="1.0">',
+                ... ( this.paths.map( path => `<filter root="/${ path }"/>` ) ),
+                '</workspaceFilter>'
+            ].join( '' ) )
     }
 
     writeTo( name ) {
@@ -63,5 +58,6 @@ exports[ '@require' ] = [
     'fs',
     'path',
     './config',
-    './observable'
+    './observable',
+    // './templates'
 ]
