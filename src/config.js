@@ -24,6 +24,11 @@ exports = module.exports = ( ) => ( {
         prefix: 'aem-sync:'
     },
 
+    package: {
+        base: 'jcr_root/',
+        fileType: '.zip'
+    },
+
     watcher: {
         events: [
             'add',
@@ -37,4 +42,3 @@ exports = module.exports = ( ) => ( {
 } )
 
 exports[ '@singleton' ] = true
-exports[ '@require' ] = [ ]
