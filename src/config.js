@@ -11,6 +11,14 @@ exports = module.exports = (
         user:  'admin',
         pass:  'admin',
 
+        get auth( ) {
+            with( this ) {
+                return Buffer
+                    .from( `${ user }:${ pass }` )
+                    .toString( 'base64' )
+            }
+        },
+
         get url( ) {
             with( this ) {
                 return `${ proto }://${ host }:${ port }/${ service }`
@@ -28,7 +36,8 @@ exports = module.exports = (
 
     package: {
         base: 'jcr_root/',
-        fileType: '.zip'
+        fileType: '.zip',
+        name: 'aem-sync'
     },
 
     templateRoot: path.join( __dirname, './templates' ),

@@ -5,19 +5,14 @@ exports = module.exports = (
     archiver,
     fs,
     path,
-    config,
-    Observable,
-    // templates
-) => class extends Observable {
+    config
+) => class {
     constructor( paths = [ ] ) {
-        super( ) 
-
         // create the archive 
         const zip = archiver( 'zip' )
 
         // extend the instance
         Object.assign( this, {
-            source: zip,
             paths,
             zip
         } )
@@ -33,6 +28,8 @@ exports = module.exports = (
 
         // close the archive
         zip.finalize( )
+
+        return zip
     }
 
     getMetaFiles( ) {
@@ -57,7 +54,5 @@ exports[ '@require' ] = [
     'archiver',
     'fs',
     'path',
-    './config',
-    './observable',
-    // './templates'
+    './config'
 ]

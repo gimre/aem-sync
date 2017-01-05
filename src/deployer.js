@@ -17,8 +17,8 @@ exports = module.exports = (
             new Watcher( './tests' )
         )
         .do( utils.log( 'deployer' ) )
-        .map( paths  => new Package( paths ) )
-        .map( bundle => bundle.writeTo( 'plm' ) )
+        .map( paths => new Package( paths ) )
+        .flatMap( utils.postToAem )
         .subscribe( )
     }
 } )
